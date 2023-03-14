@@ -1,0 +1,14 @@
+﻿@model OrderViewModel
+<div class="row">
+    <div class="col">
+        <h3>Создание нового заказа</h3>
+        <form method="post">
+            <select class="form-control my-3" asp-for="Provider.Id" asp-items="Model.Providers">
+                <option>Выберите провайдера</option>
+            </select>
+            <input class="form-control my-3" asp-for="Number" type="text" placeholder="Номер заказа" />
+            <input class="form-control my-3" asp-for="Date" type="date" />
+            <button type="submit" asp-controller="Order" asp-action="Create" class="btn btn-outline-success my-5">Создать заказ</button>
+        </form>
+    </div>
+</div>

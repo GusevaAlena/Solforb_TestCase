@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+using OrderManager.Db.Interfaces;
+using OrderManager.Db.Repositories;
+using OrderManagerWebApp;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +11,12 @@ builder.Services.AddDbContext<DatabaseContext>(options =>
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddTransient<IOrderRepository, OrderDbRepository>();
+builder.Services.AddTransient<IProviderRepository, ProviderDbRepository>();
+builder.Services.AddTransient<IOrderItemRepository, OrderItemDbRepository>();
+
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 var app = builder.Build();
 

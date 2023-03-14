@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace OrderManager.Db.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20230311204419_Initial")]
+    [Migration("20230314081040_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -35,7 +35,6 @@ namespace OrderManager.Db.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Number")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("ProviderId")
@@ -57,10 +56,9 @@ namespace OrderManager.Db.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("OrderId")
+                    b.Property<int>("OrderId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Quantity")
@@ -68,7 +66,6 @@ namespace OrderManager.Db.Migrations
                         .HasColumnType("decimal(18,3)");
 
                     b.Property<string>("Unit")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -87,7 +84,6 @@ namespace OrderManager.Db.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -129,16 +125,20 @@ namespace OrderManager.Db.Migrations
 
             modelBuilder.Entity("Order", b =>
                 {
-                    b.HasOne("Provider", null)
+                    b.HasOne("Provider", "Provider")
                         .WithMany("Orders")
                         .HasForeignKey("ProviderId");
+
+                    b.Navigation("Provider");
                 });
 
             modelBuilder.Entity("OrderItem", b =>
                 {
                     b.HasOne("Order", null)
                         .WithMany("OrderItems")
-                        .HasForeignKey("OrderId");
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Order", b =>
