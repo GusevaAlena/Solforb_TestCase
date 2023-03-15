@@ -50,5 +50,7 @@ namespace OrderManager.Db.Repositories
             databaseContext.Orders.Remove(order);
             await databaseContext.SaveChangesAsync();
         }
+        
+        
     }
 }

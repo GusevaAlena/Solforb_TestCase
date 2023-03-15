@@ -1,14 +1,36 @@
-﻿@model OrdersViewModel
-<div class="row my-5">
-    <div class="col-9">
-        <form>
-            <label>Выбрать заказ в период с </label>
-            <input asp-for="MonthAgo" type="date"/>
+﻿@model HomePageViewModel
+
+<div class="row">
+    <div class="col">
+        <form method="post">
+            <div class="date-filter my-3">
+            <label>Выбрать заказы в период с </label>
+            <input asp-for="MonthAgo" type="date" />
             <label> по </label>
-            <input asp-for="Today" type="date"/>
+            <input asp-for="Today" type="date" />
+            </div>
+            <table class="table table-borderless">
+                <tbody>
+                    <tr>
+                        <td><label>Поставщик: </label></td>
+                        <td><select class="dropdown-select" multiple="multiple" asp-items="@Model.Providers"></select></td>
+                        <td><label>Номер заказа: </label></td>
+                        <td><select class="dropdown-select" multiple="multiple" asp-items="@Model.Providers"></select></td>
+                    </tr>
+                    <tr>
+                        <td><label>Позиция в заказе: </label></td>
+                        <td><select class="dropdown-select" multiple="multiple" asp-items="@Model.Providers"></select></td>
+                        <td><label>Единица измерения: </label></td>
+                        <td><select class="dropdown-select" multiple="multiple" asp-items="@Model.Providers"></select></td>
+                    </tr>
+                </tbody>
+            </table>
+            <button class="btn btn-outline-dark" type="submit" asp-controller="" asp-action="">Применить фильтры</button>
         </form>
     </div>
-    <div class="col-3">
+</div>
+<div class="row my-5">
+    <div class="col align-content-end">
         <a asp-controller="Order" asp-action="Add" class="btn btn-outline-dark">Добавить заказ</a>
     </div>
 </div>
@@ -29,7 +51,7 @@
                     <tr>
                         <td><a asp-controller="Order" asp-action="Details" asp-route-orderId="@order.Id">@order.Number</a></td>
                         <td>@order.Date.ToString("d")</td>
-                        <td>@order.Provider.Name</td>                      
+                        <td>@order.Provider.Name</td>
                     </tr>
                 }
             </tbody>
