@@ -3,10 +3,14 @@
     <div class="col-6 text-center">
         <h3>Добавление новой позиции в заказ</h3>
         <form method="post">
+            <div class="validation" asp-validation-summary="ModelOnly"></div>
             <input type="hidden" asp-for="OrderId" />
             <input class="form-control my-3" asp-for="Name" type="text" placeholder="Наименование" />
+            <span class="alert-danger" asp-validation-for="Name"></span><br />
             <input class="form-control my-3" asp-for="Quantity" type="text" placeholder="Количество" />
+            <span class="alert-danger" asp-validation-for="Quantity"></span><br />
             <input class="form-control my-3" asp-for="Unit" type="text" placeholder="Единица" />
+            <span class="alert-danger" asp-validation-for="Unit"></span><br />
             <button type="submit" asp-controller="OrderItem" asp-action="Add" class="btn btn-outline-success my-5">Сохранить</button>
         </form>
     </div>

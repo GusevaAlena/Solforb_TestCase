@@ -3,11 +3,14 @@
     <div class="col">
         <h3>Редактирование заказа</h3>
         <form method="post">
+            <div class="validation" asp-validation-summary="ModelOnly"></div>
             <input type="hidden" asp-for="Id" />
             <select class="form-control my-3" asp-for="Provider.Id" asp-items="Model.Providers">
                 <option>Выберите провайдера</option>
             </select>
+            <span class="alert-danger" asp-validation-for="Provider.Id"></span><br />
             <input class="form-control my-3" asp-for="Number" type="text" placeholder="Номер заказа" />
+            <span class="alert-danger" asp-validation-for="Number"></span><br />
             <input class="form-control my-3" asp-for="Date" type="date" />
             @if (Model.OrderItems.Count == 0)
             {

@@ -29,19 +29,27 @@ namespace OrderManagerWebApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAsync(OrderViewModel orderAddVM)
+        public async Task<IActionResult> CreateAsync(OrderViewModel orderVM)
         {
+            var order = await orderRepository.TryGetByNumberAndProviderAsync(orderVM.Number, orderVM.Provider.Id);
+            
+            if (order != null)
+            {
+                ModelState.AddModelError("", "Заказ с таким номером у данного поставщика уже существует! " +
+                    "Измените номер заказа или выберите другого поставщика из списка");
+            }
+
             if (ModelState.IsValid)
             {
-                orderAddVM.Provider = await providerRepository.TryGetByIdAsync(orderAddVM.Provider.Id);
-                await orderRepository.CreateAsync(mapper.Map<Order>(orderAddVM));
-                var orderCreatedId = (await orderRepository.TryGetByNumberAndProviderAsync(orderAddVM.Number,orderAddVM.Provider.Id)).Id;
+                orderVM.Provider = await providerRepository.TryGetByIdAsync(orderVM.Provider.Id);
+                await orderRepository.CreateAsync(mapper.Map<Order>(orderVM));
+                var orderCreatedId = (await orderRepository.TryGetByNumberAndProviderAsync(orderVM.Number,orderVM.Provider.Id)).Id;
                 return RedirectToAction("Update", new {orderId = orderCreatedId});
             }
                 
-            orderAddVM.Providers = (await providerRepository.GetAllAsync())
+            orderVM.Providers = (await providerRepository.GetAllAsync())
                 .Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Name });
-            return View(orderAddVM);
+            return View(orderVM);
         }
         public async Task<IActionResult> UpdateAsync(int orderId)
         {
@@ -55,6 +63,14 @@ namespace OrderManagerWebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> SaveChangesAsync(OrderViewModel orderVM)
         {
+            var orderCreated = await orderRepository.TryGetByNumberAndProviderAsync(orderVM.Number, orderVM.Provider.Id);
+
+            if (orderCreated != null)
+            {
+                ModelState.AddModelError("", "Заказ с таким номером у данного поставщика уже существует! " +
+                    "Измените номер заказа или выберите другого поставщика из списка");
+            }
+
             if (ModelState.IsValid)
             {
                 await orderRepository.UpdateAsync(mapper.Map<Order>(orderVM));
@@ -63,7 +79,7 @@ namespace OrderManagerWebApp.Controllers
 
             orderVM.Providers = (await providerRepository.GetAllAsync())
                 .Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Name });
-            return View(orderVM);
+            return View("Update",orderVM);
         }
         public async Task<IActionResult> DetailsAsync(int orderId)
         {

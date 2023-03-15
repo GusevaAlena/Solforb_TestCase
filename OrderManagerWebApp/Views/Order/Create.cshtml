@@ -3,10 +3,13 @@
     <div class="col">
         <h3>Создание нового заказа</h3>
         <form method="post">
+            <div class="validation alert-danger" asp-validation-summary="ModelOnly"></div>
             <select class="form-control my-3" asp-for="Provider.Id" asp-items="Model.Providers">
                 <option>Выберите провайдера</option>
             </select>
+            <span class="alert-danger" asp-validation-for="Provider.Id"></span><br />
             <input class="form-control my-3" asp-for="Number" type="text" placeholder="Номер заказа" />
+            <span class="alert-danger" asp-validation-for="Number"></span><br />
             <input class="form-control my-3" asp-for="Date" type="date" />
             <button type="submit" asp-controller="Order" asp-action="Create" class="btn btn-outline-success my-5">Создать заказ</button>
         </form>
