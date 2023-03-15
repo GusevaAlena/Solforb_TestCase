@@ -1,0 +1,14 @@
+﻿@model OrderItemViewModel
+<div class="row">
+    <div class="col-6 text-center">
+        <h3>Редактирование позиции в заказе</h3>
+        <form method="post">
+            <input type="hidden" asp-for="OrderId" />
+            <input type="hidden" asp-for="Id"/>
+            <input class="form-control my-3" asp-for="Name" type="text" placeholder="Наименование" />
+            <input class="form-control my-3" asp-for="Quantity" type="text" placeholder="Количество" />
+            <input class="form-control my-3" asp-for="Unit" type="text" placeholder="Единица" />
+            <button type="submit" asp-controller="OrderItem" asp-action="SaveChanges" class="btn btn-outline-success my-5">Сохранить</button>
+        </form>
+    </div>
+</div>

@@ -21,19 +21,15 @@
                     <th scope="col">№ Заказа</th>
                     <th scope="col">Дата</th>
                     <th scope="col">Поставщик</th>
-                    <th scope="col"></th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var order in Model.Orders)
                 {
                     <tr>
-                        <td>@order.Number</td>
+                        <td><a asp-controller="Order" asp-action="Details" asp-route-orderId="@order.Id">@order.Number</a></td>
                         <td>@order.Date.ToString("d")</td>
-                        <td></td>
-                        <td>
-                            <a asp-controller="" asp-action="" asp-route-orderId="@order.Id">Подробнее</a>
-                        </td>
+                        <td>@order.Provider.Name</td>                      
                     </tr>
                 }
             </tbody>

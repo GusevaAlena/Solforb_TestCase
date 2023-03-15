@@ -53,7 +53,7 @@ namespace OrderManagerWebApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SaveChangesAsync(OrderViewModel orderVM, int orderId)
+        public async Task<IActionResult> SaveChangesAsync(OrderViewModel orderVM)
         {
             if (ModelState.IsValid)
             {
@@ -64,6 +64,15 @@ namespace OrderManagerWebApp.Controllers
             orderVM.Providers = (await providerRepository.GetAllAsync())
                 .Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Name });
             return View(orderVM);
+        }
+        public async Task<IActionResult> DetailsAsync(int orderId)
+        {
+            return View(mapper.Map<OrderViewModel>(await orderRepository.TryGetByIdAsync(orderId)));
+        }
+        public async Task<IActionResult> DeleteAsync(int orderId)
+        {
+            await orderRepository.DeleteAsync(orderId);
+            return RedirectToAction("Index","Home");
         }
     }
 }

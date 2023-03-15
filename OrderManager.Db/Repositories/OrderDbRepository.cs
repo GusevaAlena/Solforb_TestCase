@@ -37,10 +37,17 @@ namespace OrderManager.Db.Repositories
         public async Task UpdateAsync(Order order)
         {
             var currentOrder = await TryGetByIdAsync(order.Id);
+            var newProvider = await databaseContext.Providers.FirstOrDefaultAsync(x => x.Id == order.Provider.Id);
             currentOrder.Number = order.Number;
-            currentOrder.Provider = order.Provider;
-            currentOrder.OrderItems = order.OrderItems;
+            currentOrder.Provider = newProvider;
             currentOrder.Date = order.Date;
+            await databaseContext.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(int orderId)
+        {
+            var order = await TryGetByIdAsync(orderId);
+            databaseContext.Orders.Remove(order);
             await databaseContext.SaveChangesAsync();
         }
     }

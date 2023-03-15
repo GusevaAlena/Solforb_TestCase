@@ -3,13 +3,12 @@
     <div class="col">
         <h3>Редактирование заказа</h3>
         <form method="post">
-            <input type="hidden" asp-for="Id"/>
+            <input type="hidden" asp-for="Id" />
             <select class="form-control my-3" asp-for="Provider.Id" asp-items="Model.Providers">
                 <option>Выберите провайдера</option>
             </select>
             <input class="form-control my-3" asp-for="Number" type="text" placeholder="Номер заказа" />
             <input class="form-control my-3" asp-for="Date" type="date" />
-
             @if (Model.OrderItems.Count == 0)
             {
                 <h5>На данный момент в заказ не добавлено ни одной позиции</h5>
@@ -34,8 +33,8 @@
                                 <td>@orderItem.Quantity</td>
                                 <td>@orderItem.Unit</td>
                                 <td>
-                                    <a asp-controller="" asp-action="" asp-route-orderId="@orderItem.Id">Изменить</a>
-                                    <a asp-controller="" asp-action="" asp-route-orderId="@orderItem.Id">Удалить</a>
+                                    <a asp-controller="OrderItem" asp-action="Update" asp-route-orderItemId="@orderItem.Id">Изменить</a>
+                                    <a asp-controller="OrderItem" asp-action="Delete" asp-route-orderItemId="@orderItem.Id" asp-route-orderId="@Model.Id">Удалить</a>
                                 </td>
                             </tr>
                         }
