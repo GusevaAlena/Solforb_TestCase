@@ -13,19 +13,19 @@
                 <tbody>
                     <tr>
                         <td><label>Поставщик: </label></td>
-                        <td><select class="dropdown-select" multiple="multiple" asp-items="@Model.Providers"></select></td>
+                        <td><select class="dropdown-select" multiple="multiple" asp-for="ProvidersFilter" asp-items="@Model.Providers"></select></td>
                         <td><label>Номер заказа: </label></td>
-                        <td><select class="dropdown-select" multiple="multiple" asp-items="@Model.Providers"></select></td>
+                        <td><select class="dropdown-select" multiple="multiple" asp-for="OrderNumbersFilter" asp-items="@Model.OrderNumbers"></select></td>
                     </tr>
                     <tr>
                         <td><label>Позиция в заказе: </label></td>
-                        <td><select class="dropdown-select" multiple="multiple" asp-items="@Model.Providers"></select></td>
+                        <td><select class="dropdown-select" multiple="multiple" asp-for="OrderItemNamesFilter" asp-items="@Model.OrderItemNames"></select></td>
                         <td><label>Единица измерения: </label></td>
-                        <td><select class="dropdown-select" multiple="multiple" asp-items="@Model.Providers"></select></td>
+                        <td><select class="dropdown-select" multiple="multiple" asp-for="OrderItemUnitsFilter" asp-items="@Model.OrderItemUnits"></select></td>
                     </tr>
                 </tbody>
             </table>
-            <button class="btn btn-outline-dark" type="submit" asp-controller="" asp-action="">Применить фильтры</button>
+            <button class="btn btn-outline-dark" type="submit" asp-controller="Home" asp-action="Filter">Применить фильтры</button>
         </form>
     </div>
 </div>

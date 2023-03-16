@@ -8,6 +8,10 @@ namespace OrderManagerWebApp.Models
         public DateTime Today { get; set; } = DateTime.Now;
         public DateTime MonthAgo { get; set; } = DateTime.Now.AddMonths(-1);
         public List<Order> Orders { get; set; }
+        public List<string> ProvidersFilter { get; set; }
+        public List<string> OrderNumbersFilter { get; set; }
+        public List<string> OrderItemNamesFilter { get; set; }
+        public List<string> OrderItemUnitsFilter { get; set; }
         public IEnumerable<SelectListItem> Providers { get; set; }
         public IEnumerable<SelectListItem> OrderNumbers { get; set; }
         public IEnumerable<SelectListItem> OrderItemNames { get; set; }

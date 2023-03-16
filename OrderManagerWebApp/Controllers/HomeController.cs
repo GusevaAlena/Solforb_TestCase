@@ -18,10 +18,28 @@ namespace OrderManagerWebApp.Controllers
         public async Task<IActionResult> Index()
         {
             var oVM = new HomePageViewModel();
-            oVM.Orders = await orderRepository.GetAllAsync();
+            var orders = await orderRepository.GetAllAsync();
+            oVM.Orders = orders;
             oVM.Providers = (await providerRepository.GetAllAsync())
                 .Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Name });
+            oVM.OrderNumbers = orders.Select(x => x.Number)
+                .Distinct()
+                .Select(x => new SelectListItem { Value = x, Text = x });
+            oVM.OrderItemNames = orders.SelectMany(x => x.OrderItems)
+                .Select(x => x.Name)
+                .Distinct()
+                .Select(x => new SelectListItem { Value = x, Text = x });
+            oVM.OrderItemUnits = orders.SelectMany(x => x.OrderItems)
+                .Select(x => x.Unit)
+                .Distinct()
+                .Select(x => new SelectListItem { Value = x, Text = x });
             return View(oVM);
-        }     
+        }
+
+        [HttpPost]
+        public IActionResult Filter(HomePageViewModel homePageVM)
+        {
+            return View("Index", homePageVM);
+        }
     }
 }
