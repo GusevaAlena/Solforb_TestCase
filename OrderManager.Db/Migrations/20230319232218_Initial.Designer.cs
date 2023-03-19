@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace OrderManager.Db.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20230314081040_Initial")]
+    [Migration("20230319232218_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
