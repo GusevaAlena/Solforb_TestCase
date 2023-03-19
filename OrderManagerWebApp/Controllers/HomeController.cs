@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper.Internal;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using OrderManager.Db.Interfaces;
 using OrderManagerWebApp.Models;
@@ -17,29 +18,45 @@ namespace OrderManagerWebApp.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            var oVM = new HomePageViewModel();
-            var orders = await orderRepository.GetAllAsync();
-            oVM.Orders = orders;
-            oVM.Providers = (await providerRepository.GetAllAsync())
-                .Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Name });
-            oVM.OrderNumbers = orders.Select(x => x.Number)
-                .Distinct()
-                .Select(x => new SelectListItem { Value = x, Text = x });
-            oVM.OrderItemNames = orders.SelectMany(x => x.OrderItems)
-                .Select(x => x.Name)
-                .Distinct()
-                .Select(x => new SelectListItem { Value = x, Text = x });
-            oVM.OrderItemUnits = orders.SelectMany(x => x.OrderItems)
-                .Select(x => x.Unit)
-                .Distinct()
-                .Select(x => new SelectListItem { Value = x, Text = x });
-            return View(oVM);
+            var homePageVM = new HomePageViewModel();
+            await GetDataAsync(homePageVM);
+            return View(homePageVM);
         }
 
         [HttpPost]
-        public IActionResult Filter(HomePageViewModel homePageVM)
+        public async Task<IActionResult> Filter(HomePageViewModel homePageVM)
         {
+            await GetDataAsync(homePageVM);
+            var result = homePageVM.Orders
+                .Where(x => x.Date >= homePageVM.MonthAgo && x.Date <= homePageVM.Today);
+            if (homePageVM.Filter != null)
+            {
+                result = result
+                    .Where(x => FilterHelper.IsContainValueInFilter(x.Provider.Id.ToString(), homePageVM.Filter.Providers))
+                    .Where(x => FilterHelper.IsContainValueInFilter(x.Number, homePageVM.Filter.OrderNumbers))
+                    .Where(x => x.OrderItems.Any(y => FilterHelper.IsContainValueInFilter(y.Name, homePageVM.Filter.OrderItemNames)))
+                    .Where(x => x.OrderItems.Any(y => FilterHelper.IsContainValueInFilter(y.Unit, homePageVM.Filter.OrderItemUnits)));
+            }
+            homePageVM.Orders = result;
             return View("Index", homePageVM);
+        }
+        private async Task GetDataAsync (HomePageViewModel homePageVM)
+        {
+            var orders = await orderRepository.GetAllAsync();
+            homePageVM.Orders = orders;
+            homePageVM.Providers = (await providerRepository.GetAllAsync())
+                .Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Name });
+            homePageVM.OrderNumbers = orders.Select(x => x.Number)
+                .Distinct()
+                .Select(x => new SelectListItem { Value = x, Text = x });
+            homePageVM.OrderItemNames = orders.SelectMany(x => x.OrderItems)
+                .Select(x => x.Name)
+                .Distinct()
+                .Select(x => new SelectListItem { Value = x, Text = x });
+            homePageVM.OrderItemUnits = orders.SelectMany(x => x.OrderItems)
+                .Select(x => x.Unit)
+                .Distinct()
+                .Select(x => new SelectListItem { Value = x, Text = x });
         }
     }
 }

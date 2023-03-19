@@ -51,6 +51,5 @@ namespace OrderManager.Db.Repositories
             await databaseContext.SaveChangesAsync();
         }
         
-        
     }
 }
