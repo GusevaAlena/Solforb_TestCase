@@ -4,7 +4,7 @@ namespace OrderManagerWebApp
 {
     public static class FilterHelper
     {
-        public static bool IsContainValueInFilter (string value, IEnumerable<string> filters)
+        public static bool IsContainValueInFilter(string value, IEnumerable<string> filters)
         {
             if (filters == null)
                 return true;

@@ -3,9 +3,9 @@
     <div class="col-6 text-center">
         <h3>Редактирование позиции в заказе</h3>
         <form method="post">
-            <div class="validation" asp-validation-summary="ModelOnly"></div>
+            <div class="validation alert-danger" asp-validation-summary="ModelOnly"></div>
             <input type="hidden" asp-for="OrderId" />
-            <input type="hidden" asp-for="Id"/>
+            <input type="hidden" asp-for="Id" />
             <input class="form-control my-3" asp-for="Name" type="text" placeholder="Наименование" />
             <span class="alert-danger" asp-validation-for="Name"></span><br />
             <input class="form-control my-3" asp-for="Quantity" type="text" placeholder="Количество" />

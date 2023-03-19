@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Update.Internal;
 using OrderManager.Db.Interfaces;
 using OrderManagerWebApp.Models;
 
@@ -21,15 +20,18 @@ namespace OrderManagerWebApp.Controllers
 
         public IActionResult Add(int orderId)
         {
-            var orderItemVM = new OrderItemViewModel();
-            return View();
+            var orderItemVM = new OrderItemViewModel
+            {
+                OrderId = orderId
+            };
+            return View(orderItemVM);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddAsync(OrderItemViewModel orderItemVM, int orderId)
+        public async Task<IActionResult> AddAsync(OrderItemViewModel orderItemVM)
         {
-            var currentOrder = await orderRepository.TryGetByIdAsync(orderId);
-            
+            var currentOrder = await orderRepository.TryGetByIdAsync(orderItemVM.OrderId);
+
             if (currentOrder.Number == orderItemVM.Name)
             {
                 ModelState.AddModelError("", "Наименование позиции в заказе не " +
@@ -38,9 +40,10 @@ namespace OrderManagerWebApp.Controllers
 
             if (ModelState.IsValid)
             {
-                await orderItemRepository.AddAsync(mapper.Map<OrderItem>(orderItemVM), orderId);
-                return RedirectToAction("Update", "Order", new { orderId });
+                await orderItemRepository.AddAsync(mapper.Map<OrderItem>(orderItemVM), orderItemVM.OrderId);
+                return RedirectToAction("Update", "Order", new { orderItemVM.OrderId });
             }
+
             return View(orderItemVM);
         }
 
@@ -64,15 +67,16 @@ namespace OrderManagerWebApp.Controllers
             if (ModelState.IsValid)
             {
                 await orderItemRepository.UpdateAsync(mapper.Map<OrderItem>(orderItemVM));
-                return RedirectToAction("Update", "Order", new {orderId=orderItemVM.OrderId});
+                return RedirectToAction("Update", "Order", new { orderId = orderItemVM.OrderId });
             }
-            return View("Update",orderItemVM);
+
+            return View("Update", orderItemVM);
         }
 
         public async Task<IActionResult> DeleteAsync(int orderItemId, int orderId)
         {
             await orderItemRepository.DeleteAsync(orderItemId);
             return RedirectToAction("Update", "Order", new { orderId });
-        } 
+        }
     }
 }

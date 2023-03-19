@@ -7,7 +7,7 @@ namespace OrderManagerWebApp.Models
     {
         public int Id { get; set; }
         public int OrderId { get; set; }
-        [Required(ErrorMessage ="Введите наименование позиции")]
+        [Required(ErrorMessage = "Введите наименование позиции")]
         public string Name { get; set; }
         [Required(ErrorMessage = "Укажите количество")]
         public decimal Quantity { get; set; }

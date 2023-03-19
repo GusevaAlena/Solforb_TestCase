@@ -1,51 +1,57 @@
 ﻿@model OrderViewModel
 <div class="row">
     <div class="col">
-        <h3>Редактирование заказа</h3>
         <form method="post">
-            <div class="validation" asp-validation-summary="ModelOnly"></div>
-            <input type="hidden" asp-for="Id" />
-            <select class="form-control my-3" asp-for="Provider.Id" asp-items="Model.Providers">
-                <option>Выберите провайдера</option>
-            </select>
-            <span class="alert-danger" asp-validation-for="Provider.Id"></span><br />
-            <input class="form-control my-3" asp-for="Number" type="text" placeholder="Номер заказа" />
-            <span class="alert-danger" asp-validation-for="Number"></span><br />
-            <input class="form-control my-3" asp-for="Date" type="date" />
-            @if (Model.OrderItems.Count == 0)
-            {
-                <h5>На данный момент в заказ не добавлено ни одной позиции</h5>
-            }
-            else
-            {
-                <h5>Позиции в заказе</h5>
-                <table class="table table-dark table-bordered table-hover">
-                    <thead>
-                        <tr>
-                            <th scope="col">Наименование</th>
-                            <th scope="col">Количество</th>
-                            <th scope="col">Единица</th>
-                            <th scope="col"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var orderItem in Model.OrderItems)
-                        {
+            <div class="order-editing">
+                <h3>Редактирование заказа</h3>
+                <div class="validation alert-danger" asp-validation-summary="ModelOnly"></div>
+                <input type="hidden" asp-for="Id" />
+                <select class="form-control my-3" asp-for="Provider.Id" asp-items="Model.Providers">
+                    <option>Выберите провайдера</option>
+                </select>
+                <span class="alert-danger" asp-validation-for="Provider.Id"></span><br />
+                <input class="form-control my-3" asp-for="Number" type="text" placeholder="Номер заказа" />
+                <span class="alert-danger" asp-validation-for="Number"></span><br />
+                <input class="form-control my-3" asp-for="Date" type="date" />
+            </div>
+            <div class="order-positions">
+                @if (Model.OrderItems.Count == 0)
+                {
+                    <h5>На данный момент в заказ не добавлено ни одной позиции</h5>
+                }
+                else
+                {
+                    <h5>Позиции в заказе</h5>
+                    <table class="table table-dark table-bordered table-hover">
+                        <thead>
                             <tr>
-                                <td>@orderItem.Name</td>
-                                <td>@orderItem.Quantity</td>
-                                <td>@orderItem.Unit</td>
-                                <td>
-                                    <a asp-controller="OrderItem" asp-action="Update" asp-route-orderItemId="@orderItem.Id">Изменить</a>
-                                    <a asp-controller="OrderItem" asp-action="Delete" asp-route-orderItemId="@orderItem.Id" asp-route-orderId="@Model.Id">Удалить</a>
-                                </td>
+                                <th scope="col">Наименование</th>
+                                <th scope="col">Количество</th>
+                                <th scope="col">Единица</th>
+                                <th scope="col"></th>
                             </tr>
-                        }
-                    </tbody>
-                </table>
-            }
-            <a type="submit" asp-controller="OrderItem" asp-action="Add" asp-route-orderId="@Model.Id" class="btn btn-outline-dark my-5">Добавить позицию в заказ</a>
-            <button type="submit" asp-controller="Order" asp-action="SaveChanges" class="btn btn-outline-success my-5">Сохранить</button>
+                        </thead>
+                        <tbody>
+                            @foreach (var orderItem in Model.OrderItems)
+                            {
+                                <tr>
+                                    <td>@orderItem.Name</td>
+                                    <td>@orderItem.Quantity</td>
+                                    <td>@orderItem.Unit</td>
+                                    <td>
+                                        <a asp-controller="OrderItem" asp-action="Update" asp-route-orderItemId="@orderItem.Id">Изменить</a>
+                                        <a asp-controller="OrderItem" asp-action="Delete" asp-route-orderItemId="@orderItem.Id" asp-route-orderId="@Model.Id">Удалить</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                <a type="submit" asp-controller="OrderItem" asp-action="Add" asp-route-orderId="@Model.Id" class="btn btn-outline-dark my-5">Добавить позицию в заказ</a>
+            </div>
+            <div class="text-center">
+                <button type="submit" asp-controller="Order" asp-action="SaveChanges" class="btn btn-outline-success my-5">Сохранить</button>
+            </div>
         </form>
     </div>
 </div>

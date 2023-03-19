@@ -1,10 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OrderManager.Db.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OrderManager.Db.Repositories
 {
@@ -27,13 +22,13 @@ namespace OrderManager.Db.Repositories
                 {
                     OrderItems = new List<OrderItem> { orderItem }
                 };
-               await databaseContext.Orders.AddAsync(currentOrder);
+                await databaseContext.Orders.AddAsync(currentOrder);
             }
             else
             {
                 currentOrder.OrderItems.Add(orderItem);
-            }  
-            
+            }
+
             await databaseContext.SaveChangesAsync();
         }
 
@@ -49,9 +44,9 @@ namespace OrderManager.Db.Repositories
             return await databaseContext.OrderItems.FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<List<OrderItem>> TryGetByOrderId(int orderId)
+        public async Task<List<OrderItem>> TryGetByOrderIdAsync(int orderId)
         {
-            return await databaseContext.OrderItems.Where(x=>x.OrderId==orderId)
+            return await databaseContext.OrderItems.Where(x => x.OrderId == orderId)
                 .ToListAsync();
         }
 

@@ -32,8 +32,10 @@
                         }
                     </tbody>
                 </table>
+                <div class="text-center">
                 <a asp-controller="Order" asp-action="Update" asp-route-orderId="@Model.Id" class="btn btn-outline-dark my-5">Редактировать</a>
                 <a asp-controller="Order" asp-action="Delete" asp-route-orderId="@Model.Id" class="btn btn-outline-danger my-5">Удалить</a>
+                </div>
             </div>
         </div>
     </div>

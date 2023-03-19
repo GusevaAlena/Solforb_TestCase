@@ -22,17 +22,19 @@ namespace OrderManagerWebApp.Controllers
         }
         public async Task<IActionResult> AddAsync()
         {
-            var orderAddVM = new OrderViewModel();
-            orderAddVM.Providers = (await providerRepository.GetAllAsync())
-                .Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Name });
-            return View("Create",orderAddVM);
+            var orderAddVM = new OrderViewModel
+            {
+                Providers = (await providerRepository.GetAllAsync())
+                .Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Name })
+            };
+            return View("Create", orderAddVM);
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateAsync(OrderViewModel orderVM)
         {
             var order = await orderRepository.TryGetByNumberAndProviderAsync(orderVM.Number, orderVM.Provider.Id);
-            
+
             if (order != null)
             {
                 ModelState.AddModelError("", "Заказ с таким номером у данного поставщика уже существует! " +
@@ -43,10 +45,10 @@ namespace OrderManagerWebApp.Controllers
             {
                 orderVM.Provider = await providerRepository.TryGetByIdAsync(orderVM.Provider.Id);
                 await orderRepository.CreateAsync(mapper.Map<Order>(orderVM));
-                var orderCreatedId = (await orderRepository.TryGetByNumberAndProviderAsync(orderVM.Number,orderVM.Provider.Id)).Id;
-                return RedirectToAction("Update", new {orderId = orderCreatedId});
+                var orderCreatedId = (await orderRepository.TryGetByNumberAndProviderAsync(orderVM.Number, orderVM.Provider.Id)).Id;
+                return RedirectToAction("Update", new { orderId = orderCreatedId });
             }
-                
+
             orderVM.Providers = (await providerRepository.GetAllAsync())
                 .Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Name });
             return View(orderVM);
@@ -67,8 +69,11 @@ namespace OrderManagerWebApp.Controllers
 
             if (orderCreated != null)
             {
-                ModelState.AddModelError("", "Заказ с таким номером у данного поставщика уже существует! " +
-                    "Измените номер заказа или выберите другого поставщика из списка");
+                if (orderVM.Id != orderCreated.Id)
+                {
+                    ModelState.AddModelError("", "Заказ с таким номером у данного поставщика уже существует! " +
+                        "Измените номер заказа или выберите другого поставщика из списка");
+                }
             }
 
             if (ModelState.IsValid)
@@ -77,18 +82,21 @@ namespace OrderManagerWebApp.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
+            orderVM.OrderItems = await orderItemRepository.TryGetByOrderIdAsync(orderVM.Id);
             orderVM.Providers = (await providerRepository.GetAllAsync())
                 .Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Name });
-            return View("Update",orderVM);
+            return View("Update", orderVM);
         }
+
         public async Task<IActionResult> DetailsAsync(int orderId)
         {
             return View(mapper.Map<OrderViewModel>(await orderRepository.TryGetByIdAsync(orderId)));
         }
+
         public async Task<IActionResult> DeleteAsync(int orderId)
         {
             await orderRepository.DeleteAsync(orderId);
-            return RedirectToAction("Index","Home");
+            return RedirectToAction("Index", "Home");
         }
     }
 }

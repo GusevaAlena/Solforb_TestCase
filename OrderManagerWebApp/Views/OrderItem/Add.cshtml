@@ -1,9 +1,9 @@
 ﻿@model OrderItemViewModel
-<div class="row">
+<div class="row justify-content-center">
     <div class="col-6 text-center">
         <h3>Добавление новой позиции в заказ</h3>
         <form method="post">
-            <div class="validation" asp-validation-summary="ModelOnly"></div>
+            <div class="validation alert-danger" asp-validation-summary="ModelOnly"></div>
             <input type="hidden" asp-for="OrderId" />
             <input class="form-control my-3" asp-for="Name" type="text" placeholder="Наименование" />
             <span class="alert-danger" asp-validation-for="Name"></span><br />

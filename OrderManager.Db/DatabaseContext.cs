@@ -19,12 +19,10 @@ public class DatabaseContext : DbContext
         modelBuilder.Entity<Order>(entity =>
         {
             entity.HasKey(e => e.Id);
-
         });
         modelBuilder.Entity<OrderItem>(entity =>
         {
             entity.HasKey(e => e.Id);
-
         });
         modelBuilder.Entity<Provider>(entity =>
         {

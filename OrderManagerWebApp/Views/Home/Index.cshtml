@@ -4,10 +4,10 @@
     <div class="col">
         <form method="post">
             <div class="date-filter my-3">
-            <label>Выбрать заказы в период с </label>
-            <input asp-for="MonthAgo" type="date" />
-            <label> по </label>
-            <input asp-for="Today" type="date" />
+                <label>Выбрать заказы в период с </label>
+                <input asp-for="MonthAgo" type="date" />
+                <label> по </label>
+                <input asp-for="Today" type="date" />
             </div>
             <table class="table table-borderless">
                 <tbody>
@@ -25,36 +25,36 @@
                     </tr>
                 </tbody>
             </table>
-            <button class="btn btn-outline-dark" type="submit" asp-controller="Home" asp-action="Filter">Применить фильтры</button>
+            <div class="text-end">
+                <button class="btn btn-outline-dark" type="submit" asp-controller="Home" asp-action="Filter">Применить фильтры</button>
+            </div>
         </form>
     </div>
 </div>
-<div class="row my-5">
-    <div class="col align-content-end">
-        <a asp-controller="Order" asp-action="Add" class="btn btn-outline-dark">Добавить заказ</a>
-    </div>
+<div class="add-order-button text-center my-5">
+    <a asp-controller="Order" asp-action="Add" class="btn btn-outline-dark">Добавить заказ</a>
 </div>
-<div class="row my-5">
-    <div class="col text-center">
-        <h3 class="card-title">Список заказов</h3>
-        <table class="table table-dark table-bordered table-hover">
-            <thead>
+
+<div class="order-list text-center my-3">
+    <h3 class="card-title">Список заказов</h3>
+    <table class="table table-dark table-bordered table-hover">
+        <thead>
+            <tr>
+                <th scope="col">№ Заказа</th>
+                <th scope="col">Дата</th>
+                <th scope="col">Поставщик</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model.Orders)
+            {
                 <tr>
-                    <th scope="col">№ Заказа</th>
-                    <th scope="col">Дата</th>
-                    <th scope="col">Поставщик</th>
+                    <td><a asp-controller="Order" asp-action="Details" asp-route-orderId="@order.Id">@order.Number</a></td>
+                    <td>@order.Date.ToString("d")</td>
+                    <td>@order.Provider.Name</td>
                 </tr>
-            </thead>
-            <tbody>
-                @foreach (var order in Model.Orders)
-                {
-                    <tr>
-                        <td><a asp-controller="Order" asp-action="Details" asp-route-orderId="@order.Id">@order.Number</a></td>
-                        <td>@order.Date.ToString("d")</td>
-                        <td>@order.Provider.Name</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
+            }
+        </tbody>
+    </table>
 </div>
+

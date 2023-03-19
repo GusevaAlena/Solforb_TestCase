@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OrderManager.Db.Interfaces;
-using System.Reflection.Metadata.Ecma335;
 
 namespace OrderManager.Db.Repositories
 {
@@ -11,6 +10,7 @@ namespace OrderManager.Db.Repositories
         {
             this.databaseContext = databaseContext;
         }
+
         public async Task<List<Order>> GetAllAsync()
         {
             return await databaseContext.Orders
@@ -23,17 +23,20 @@ namespace OrderManager.Db.Repositories
                 .Include(x => x.OrderItems).Include(x => x.Provider)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
+
         public async Task<Order> TryGetByNumberAndProviderAsync(string number, int providerId)
         {
             return await databaseContext.Orders
                 .Include(x => x.OrderItems).Include(x => x.Provider)
                 .FirstOrDefaultAsync(x => x.Number == number && x.Provider.Id == providerId);
         }
+
         public async Task CreateAsync(Order order)
         {
             await databaseContext.Orders.AddAsync(order);
             await databaseContext.SaveChangesAsync();
         }
+
         public async Task UpdateAsync(Order order)
         {
             var currentOrder = await TryGetByIdAsync(order.Id);
@@ -50,6 +53,5 @@ namespace OrderManager.Db.Repositories
             databaseContext.Orders.Remove(order);
             await databaseContext.SaveChangesAsync();
         }
-        
     }
 }
